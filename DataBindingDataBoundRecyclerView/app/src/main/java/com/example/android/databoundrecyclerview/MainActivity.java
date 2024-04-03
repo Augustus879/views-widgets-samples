@@ -38,6 +38,12 @@ public class MainActivity extends AppCompatActivity {
                 new City("Barcelona"),
                 new City("London"),
                 new City("San Francisco")};
+
+        ArrayList<City> names = new ArrayList<City>();
+        names.add(new City("Istanbul"));
+        names.add(new City("Barcelona"));
+        names.add(new City("London"));
+        names.add(new City("San Francisco"));
         ActionCallback actionCallback = new ActionCallback() {
             @Override
             public void onClick(City city) {
@@ -51,12 +57,14 @@ public class MainActivity extends AppCompatActivity {
         };
         CityAdapter adapter = new CityAdapter(actionCallback, cities);
         binding.cityList.setAdapter(adapter);
-        MixedAdapter mixedAdapter = new MixedAdapter(actionCallback,
-                cities);
-        mixedAdapter.addItem(0, new State("Kenya", 47));
-        mixedAdapter.addItem(1, new State("United States", 323));
-        mixedAdapter.addItem(2, new State("Brazil", 206));
-        binding.mixedList.setAdapter(mixedAdapter);
+
+
+//        MixedAdapter mixedAdapter = new MixedAdapter(actionCallback,
+//                cities);
+//        mixedAdapter.addItem(0, new State("Kenya", 47));
+//        mixedAdapter.addItem(1, new State("United States", 323));
+//        mixedAdapter.addItem(2, new State("Brazil", 206));
+//        binding.mixedList.setAdapter(mixedAdapter);
     }
 
     /**
@@ -71,15 +79,37 @@ public class MainActivity extends AppCompatActivity {
 
         public CityAdapter(ActionCallback actionCallback, City... cities) {
             super(R.layout.city_item);
-            mActionCallback = actionCallback;
+
+            ActionCallback ac = new ActionCallback() {
+                @Override
+                public void onClick(City city) {
+                    if(city.getName().equals("Istanbul")) {
+                        addItem("ccc");
+                    }
+                }
+
+                @Override
+                public void onClick(State state) {
+                    state.setPopulation(state.getPopulation() + 1);
+                }
+            };
+            mActionCallback = ac;
             Collections.addAll(mCityList, cities);
         }
+
+
 
         @Override
         protected void bindItem(DataBoundViewHolder<CityItemBinding> holder, int position,
                                 List<Object> payloads) {
             holder.binding.setData(mCityList.get(position));
             holder.binding.setCallback(mActionCallback);
+        }
+
+        public void addItem(String cityName) {
+            mCityList.add(0,new City("kkk"));
+
+            notifyItemInserted(0);
         }
 
         @Override

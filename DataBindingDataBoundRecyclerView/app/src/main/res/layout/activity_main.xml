@@ -48,13 +48,13 @@
             app:layoutManager="LinearLayoutManager"
             app:layout_widthPercent="50%" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/mixed_list"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginTop="@dimen/title_height"
-            app:layoutManager="LinearLayoutManager"
-            app:layout_widthPercent="50%" />
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/mixed_list"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="end"-->
+<!--            android:layout_marginTop="@dimen/title_height"-->
+<!--            app:layoutManager="LinearLayoutManager"-->
+<!--            app:layout_widthPercent="50%" />-->
 
     </androidx.percentlayout.widget.PercentFrameLayout>
 </layout>
