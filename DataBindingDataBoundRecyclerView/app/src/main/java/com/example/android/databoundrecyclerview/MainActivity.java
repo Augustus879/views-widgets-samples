@@ -17,7 +17,9 @@
 package com.example.android.databoundrecyclerview;
 
 import android.os.Bundle;
+import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 
@@ -28,12 +30,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements VerificationCodeDialogFragment.OnVerificationCodeEnteredListener {
 
+    ActivityMainBinding mainBinding;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        mainBinding = binding;
         City[] cities = {new City("Istanbul"),
                 new City("Barcelona"),
                 new City("London"),
@@ -55,8 +59,9 @@ public class MainActivity extends AppCompatActivity {
                 state.setPopulation(state.getPopulation() + 1);
             }
         };
-        CityAdapter adapter = new CityAdapter(actionCallback, cities);
-        binding.cityList.setAdapter(adapter);
+        CityAdapter adapter = new CityAdapter(actionCallback, this, cities);
+        binding.phoneList.setAdapter(adapter);
+
 
 
 //        MixedAdapter mixedAdapter = new MixedAdapter(actionCallback,
@@ -65,6 +70,19 @@ public class MainActivity extends AppCompatActivity {
 //        mixedAdapter.addItem(1, new State("United States", 323));
 //        mixedAdapter.addItem(2, new State("Brazil", 206));
 //        binding.mixedList.setAdapter(mixedAdapter);
+    }
+
+    @Override
+    public void onVerificationCodeEntered(String code) {
+        // 处理输入的验证码，例如验证其有效性并进行后续操作
+        // ...
+        Log.d("tag", "test");
+    }
+
+    public void setInfo(String name) {
+        mainBinding.userName.setText("xyr");
+        mainBinding.phoneMac.setText("aa:bb:cc:dd");
+        mainBinding.bindTime.setText("24-04-01-13:00");
     }
 
     /**
@@ -77,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         List<City> mCityList = new ArrayList<>();
         private ActionCallback mActionCallback;
 
-        public CityAdapter(ActionCallback actionCallback, City... cities) {
+        public CityAdapter(ActionCallback actionCallback, MainActivity activity, City... cities) {
             super(R.layout.city_item);
 
             ActionCallback ac = new ActionCallback() {
@@ -85,6 +103,16 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(City city) {
                     if(city.getName().equals("Istanbul")) {
                         addItem("ccc");
+                    }
+                    if (city.getName().equals("London")) {
+                        VerificationCodeDialogFragment dialog = VerificationCodeDialogFragment.newInstance();
+
+                        dialog.show(activity.getSupportFragmentManager(), "verification_code_dialog");
+
+                    }
+                    if (city.getName().equals("Barcelona")) {
+                        activity.setInfo(city.getName());
+
                     }
                 }
 

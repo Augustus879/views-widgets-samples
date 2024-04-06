@@ -15,8 +15,11 @@
   -->
 
 <resources>
-    <string name="app_name">DataBoundRecyclerView</string>
+    <string name="app_name">Bind Mobile</string>
     <string name="state_population">%d Million</string>
-    <string name="city_list">City List</string>
-    <string name="mixed_list">Mixed List</string>
+    <string name="phone_list">Phone List</string>
+    <string name="phone_info">Phone Info</string>
+    <string name="phone_user_name">User Name</string>
+    <string name="phone_mac">Phone Mac</string>
+    <string name="phone_bind_time">Bind Time</string>
 </resources>

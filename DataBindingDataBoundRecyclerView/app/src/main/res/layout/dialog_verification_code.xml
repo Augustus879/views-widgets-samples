@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="请输入验证码"
+        android:textSize="18sp"/>
+
+    <EditText
+        android:id="@+id/code_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:maxLength="6"
+        android:imeOptions="actionDone"
+        android:hint="请输入6位验证码"/>
+
+    <TextView
+        android:id="@+id/code_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="6 / 6"
+        android:textSize="14sp"/>
+
+    <Button
+        android:id="@+id/submit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="提交" />
+
+</LinearLayout>
