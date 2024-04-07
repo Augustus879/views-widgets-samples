@@ -21,10 +21,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.DataBindingUtil;
-
-import com.example.android.databoundrecyclerview.databinding.ActivityMainBinding;
-import com.example.android.databoundrecyclerview.databinding.CityItemBinding;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,12 +29,15 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements VerificationCodeDialogFragment.OnVerificationCodeEnteredListener {
 
-    ActivityMainBinding mainBinding;
+    RecyclerView recyclerView;
+    CustomAdapter adapter;
+    //protected String[] mDataset;
+    ArrayList<String> mDataset;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        mainBinding = binding;
+        setContentView(R.layout.activity_main);
+
         City[] cities = {new City("Istanbul"),
                 new City("Barcelona"),
                 new City("London"),
@@ -48,28 +48,19 @@ public class MainActivity extends AppCompatActivity implements VerificationCodeD
         names.add(new City("Barcelona"));
         names.add(new City("London"));
         names.add(new City("San Francisco"));
-        ActionCallback actionCallback = new ActionCallback() {
-            @Override
-            public void onClick(City city) {
-                city.setFavorite(!city.isFavorite());
-            }
 
-            @Override
-            public void onClick(State state) {
-                state.setPopulation(state.getPopulation() + 1);
-            }
-        };
-        CityAdapter adapter = new CityAdapter(actionCallback, this, cities);
-        binding.phoneList.setAdapter(adapter);
+        initDataset();
+        recyclerView = findViewById(R.id.phone_list);
+        adapter = new CustomAdapter(mDataset);
+        recyclerView.setAdapter(adapter);
 
+    }
 
-
-//        MixedAdapter mixedAdapter = new MixedAdapter(actionCallback,
-//                cities);
-//        mixedAdapter.addItem(0, new State("Kenya", 47));
-//        mixedAdapter.addItem(1, new State("United States", 323));
-//        mixedAdapter.addItem(2, new State("Brazil", 206));
-//        binding.mixedList.setAdapter(mixedAdapter);
+    private void initDataset() {
+        mDataset = new ArrayList<String>();
+        for (int i = 0; i < 4; i++) {
+            mDataset.add("This is Phone #" + i);
+        }
     }
 
     @Override
@@ -80,110 +71,9 @@ public class MainActivity extends AppCompatActivity implements VerificationCodeD
     }
 
     public void setInfo(String name) {
-        mainBinding.userName.setText("xyr");
-        mainBinding.phoneMac.setText("aa:bb:cc:dd");
-        mainBinding.bindTime.setText("24-04-01-13:00");
+//        mainBinding.userName.setText("xyr");
+//        mainBinding.phoneMac.setText("aa:bb:cc:dd");
+//        mainBinding.bindTime.setText("24-04-01-13:00");
     }
 
-    /**
-     * This is an example of a data bound adapter use case where all items have the same type.
-     * <p>
-     * The parent class handles the item creation and this child class only implements the
-     * bindItem to set values in a type checked way.
-     */
-    private static class CityAdapter extends DataBoundAdapter<CityItemBinding> {
-        List<City> mCityList = new ArrayList<>();
-        private ActionCallback mActionCallback;
-
-        public CityAdapter(ActionCallback actionCallback, MainActivity activity, City... cities) {
-            super(R.layout.city_item);
-
-            ActionCallback ac = new ActionCallback() {
-                @Override
-                public void onClick(City city) {
-                    if(city.getName().equals("Istanbul")) {
-                        addItem("ccc");
-                    }
-                    if (city.getName().equals("London")) {
-                        VerificationCodeDialogFragment dialog = VerificationCodeDialogFragment.newInstance();
-
-                        dialog.show(activity.getSupportFragmentManager(), "verification_code_dialog");
-
-                    }
-                    if (city.getName().equals("Barcelona")) {
-                        activity.setInfo(city.getName());
-
-                    }
-                }
-
-                @Override
-                public void onClick(State state) {
-                    state.setPopulation(state.getPopulation() + 1);
-                }
-            };
-            mActionCallback = ac;
-            Collections.addAll(mCityList, cities);
-        }
-
-
-
-        @Override
-        protected void bindItem(DataBoundViewHolder<CityItemBinding> holder, int position,
-                                List<Object> payloads) {
-            holder.binding.setData(mCityList.get(position));
-            holder.binding.setCallback(mActionCallback);
-        }
-
-        public void addItem(String cityName) {
-            mCityList.add(0,new City("kkk"));
-
-            notifyItemInserted(0);
-        }
-
-        @Override
-        public int getItemCount() {
-            return mCityList.size();
-        }
-    }
-
-    /**
-     * This is an example of an adapter that has a convention on its items where:
-     * <ul>
-     * <li> Each item type is represented with a different layout file
-     * <li> Each layout file name their main object "data"
-     * <li> Each layout file can receive extra parameters. This one only uses "callback".
-     * </ul>
-     * <p>
-     * This kind of adapter usage might be very useful to simplify lists that have too many
-     * different item types. Also, see the similarity between <code>city_item.xml</code> and
-     * <code>state_item.xml</code>.
-     */
-    private static class MixedAdapter extends MultiTypeDataBoundAdapter {
-        private ActionCallback mActionCallback;
-
-        public MixedAdapter(ActionCallback actionCallback, Object... items) {
-            super(items);
-            mActionCallback = actionCallback;
-        }
-
-        @Override
-        protected void bindItem(DataBoundViewHolder holder, int position, List payloads) {
-            super.bindItem(holder, position, payloads);
-            // this will work even if the layout does not have a callback parameter
-            holder.binding.setVariable(BR.callback, mActionCallback);
-        }
-
-        @Override
-        public int getItemLayoutId(int position) {
-            // use layout ids as types
-            Object item = getItem(position);
-            if (item instanceof City) {
-                return R.layout.city_item;
-            }
-            if (item instanceof State) {
-                return R.layout.state_item;
-            }
-            throw new IllegalArgumentException("unknown item type " + item);
-        }
-    }
 }

@@ -16,13 +16,11 @@
 
 package com.example.android.databoundrecyclerview;
 
-import androidx.databinding.BaseObservable;
-import androidx.databinding.Bindable;
 
-public class City extends BaseObservable {
-    @Bindable
+public class City  {
+
     private String mName;
-    @Bindable
+
     private boolean mFavorite;
 
     public City(String name) {
@@ -39,11 +37,9 @@ public class City extends BaseObservable {
 
     public void setName(String name) {
         mName = name;
-        notifyPropertyChanged(BR.name);
     }
 
     public void setFavorite(boolean favorite) {
         mFavorite = favorite;
-        notifyPropertyChanged(BR.favorite);
     }
 }
