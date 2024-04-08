@@ -21,6 +21,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -49,11 +50,51 @@ public class MainActivity extends AppCompatActivity implements VerificationCodeD
         names.add(new City("London"));
         names.add(new City("San Francisco"));
 
+
+
         initDataset();
         recyclerView = findViewById(R.id.phone_list);
         adapter = new CustomAdapter(mDataset);
         recyclerView.setAdapter(adapter);
 
+        //声明一个Callback
+        ItemTouchHelper.Callback callback = new ItemTouchHelper.Callback() {
+            @Override
+            public int getMovementFlags( RecyclerView recyclerView,  RecyclerView.ViewHolder viewHolder) {
+                //控制拖拽的方向（一般是上下左右）
+                int dragFlags = 0;
+                //控制快速滑动的方向（一般是左右）
+                int swipeFlags = ItemTouchHelper.LEFT;
+                return makeMovementFlags(dragFlags, swipeFlags);//计算movement flag值
+            }
+
+            @Override
+            public boolean onMove( RecyclerView recyclerView,  RecyclerView.ViewHolder viewHolder,  RecyclerView.ViewHolder target) {
+                //拖拽处理
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                //滑动处理
+                int position = viewHolder.getAdapterPosition();
+                if(mDataset != null && mDataset.size() > 0){
+                    //删除List中对应的数据
+                    mDataset.remove(position);
+
+                    if (adapter == null){
+                        return;
+                    }
+                    //刷新页面
+                    adapter.notifyItemRemoved(position);
+
+                }
+            }
+        };
+        //创建helper对象
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        //关联recyclerView
+        itemTouchHelper.attachToRecyclerView(recyclerView);
     }
 
     private void initDataset() {

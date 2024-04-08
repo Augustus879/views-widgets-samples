@@ -86,15 +86,15 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         // Get element from your dataset at this position and replace the contents of the view
         // with that element
         viewHolder.getTextView().setText(mDataSet.get(position));
-        viewHolder.textView.setOnClickListener(v->{
-            if (viewHolder.getAdapterPosition()%2>0) {
-                mDataSet.add("add");
-                notifyItemInserted(mDataSet.size()-1);
-            } else {
-                mDataSet.remove(mDataSet.size()-1);
-                notifyItemRemoved(mDataSet.size()-1);
-            }
-        });
+//        viewHolder.textView.setOnClickListener(v->{
+//            if (viewHolder.getAdapterPosition()%2>0) {
+//                mDataSet.add("add");
+//                notifyItemInserted(mDataSet.size()-1);
+//            } else {
+//                mDataSet.remove(mDataSet.size()-1);
+//                notifyItemRemoved(mDataSet.size()-1);
+//            }
+//        });
     }
 
     @Override
