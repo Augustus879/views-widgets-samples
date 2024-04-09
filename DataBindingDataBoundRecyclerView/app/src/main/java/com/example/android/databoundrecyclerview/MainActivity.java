@@ -17,12 +17,15 @@
 package com.example.android.databoundrecyclerview;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements VerificationCodeD
     CustomAdapter adapter;
     //protected String[] mDataset;
     ArrayList<String> mDataset;
+    SwipeRefreshLayout refreshLayout;
+    private Handler mHandler = new Handler(Looper.getMainLooper());
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +58,21 @@ public class MainActivity extends AppCompatActivity implements VerificationCodeD
 
 
         initDataset();
+        refreshLayout = findViewById(R.id.refreshLayout);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {//上拉刷新，加载第一页
+                refreshLayout.setRefreshing(true);
+                Log.d("tag", "refresh");
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshLayout.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
+
         recyclerView = findViewById(R.id.phone_list);
         adapter = new CustomAdapter(mDataset);
         recyclerView.setAdapter(adapter);

@@ -41,12 +41,19 @@
         android:text="@string/phone_info"
         app:layout_widthPercent="50%" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/phone_list"
-        android:layout_height="wrap_content"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_marginTop="@dimen/title_height"
-        app:layoutManager="LinearLayoutManager"
-        app:layout_widthPercent="50%" />
+        app:layout_widthPercent="50%">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/phone_list"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            app:layoutManager="LinearLayoutManager" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/phone_info"
